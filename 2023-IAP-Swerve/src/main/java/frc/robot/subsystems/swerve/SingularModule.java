@@ -4,14 +4,24 @@
 
 package frc.robot.subsystems.swerve;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SingularModule extends SubsystemBase {
   /** Creates a new SingularModule. */
-  public SingularModule() {}
+
+  public SwerveModuleIO module;
+
+  public SingularModule(SwerveModuleIO module) {
+    this.module = module;
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Real Turn Pos #" + module.getNum(), Units.radiansToDegrees(module.getTurnPositionInRad()));
+    SmartDashboard.putNumber("Raw Turn Pos #" + module.getNum(), module.getTurnPositionInRad());
+    SmartDashboard.putNumber("Real Velocity #" + module.getNum(), module.getActualModuleState().speedMetersPerSecond);
   }
 }
