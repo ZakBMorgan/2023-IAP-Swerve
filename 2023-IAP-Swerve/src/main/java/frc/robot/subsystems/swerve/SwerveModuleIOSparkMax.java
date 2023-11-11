@@ -18,10 +18,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import frc.robot.Constants;
-//import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     private CANSparkMax driveSparkMax;
@@ -114,5 +111,77 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         state = SwerveModuleState.optimize(state, new Rotation2d(getTurnPositionInRad()));
         
         SmartDashboard.putNumber("Setpoint Drive Vel #" + this.num, state.speedMetersPerSecond);
+
+        // Cap setpoints at max speeds for safety
+        state.speedMetersPerSecond = MathUtil.clamp(state.speedMetersPerSecond, -1, 1);
+
+        // Set reference of drive motor's PIDF internally in SPARK MAX
+        // This automagically updates at a 1 KHz rate
+        drivePID.setReference(state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+
+        // Set SmartDashboard telemetry - this runs once every 20 ms
+        SmartDashboard.putNumber("Closed Loop Drive Power #" + this.num, driveSparkMax.get());
+        SmartDashboard.putNumber("Drive Velocity #" + this.num, state.speedMetersPerSecond);
+
+        // Calculate PID in motor power (from -1.0 to 1.0)
+        double turnOutput = MathUtil.clamp(this.turnPID.calculate(getTurnPositionInRad()), -1.0, 1.0);
+
+        // Set voltage of SPARK MAX
+        turnSparkMax.setVoltage(turnOutput * 12.0);
+
+        // Set internal state as passed-in state
+        this.state = state;
+
+
+    }
+
+    public SwerveModuleState getSetpointModuleState() {
+        // Returns module state
+        return this.state;
+    }
+
+    public SwerveModuleState getActualModuleState() {
+        double velocity = this.driveEncoder.getVelocity();
+        double rotation = this.getTurnPositionInRad();
+        return new SwerveModuleState(velocity, Rotation2d.fromRadians(rotation));
+    }
+
+    public void setDriveVoltage(double volts) {
+        driveSparkMax.setVoltage(volts);
+    }
+
+    public void setTurnVoltage(double volts) {
+        turnSparkMax.setVoltage(volts);
+    }
+
+    public void setDriveBrakeMode(boolean enable) {
+        if (enable) {
+            driveSparkMax.setIdleMode(IdleMode.kBrake);
+        } else {
+            driveSparkMax.setIdleMode(IdleMode.kCoast);
+        }
+    }
+
+    public void setTurnBrakeMode(boolean enable) {
+        if (enable) {
+            turnSparkMax.setIdleMode(IdleMode.kBrake);
+        } else {
+            turnSparkMax.setIdleMode(IdleMode.kCoast);
+        }
+    }
+
+    public SwerveModulePosition getPosition() {
+        double position = driveEncoder.getPosition();
+        double rotation = this.getTurnPositionInRad();
+        return new SwerveModulePosition(position, new Rotation2d(rotation));
+    }
+
+    public void resetEncoders() {
+        // Resets only drive encoder
+        driveEncoder.setPosition(0.0);
+    }
+
+    public int getNum() {
+        return num;
     }
 }
