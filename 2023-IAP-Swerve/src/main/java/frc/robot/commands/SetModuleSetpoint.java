@@ -10,7 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 //import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Joystick;
+//import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.swerve.SingularModule;
@@ -27,12 +27,11 @@ public class SetModuleSetpoint extends CommandBase {
   private double angle = 0.0;
 
   private final SingularModule module;
-  private final Joystick joy;
+  //private final Joystick joy;
 
-  public SetModuleSetpoint(SingularModule module, Joystick joy) {
+  public SetModuleSetpoint(SingularModule module) {
     
     this.module = module;
-    this.joy = joy;
 
     addRequirements(module);
     // Use addRequirements() here to declare subsystem dependencies.
