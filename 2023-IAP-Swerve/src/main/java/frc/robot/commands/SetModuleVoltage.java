@@ -10,37 +10,40 @@ import frc.robot.subsystems.swerve.SingularModule;
 
 public class SetModuleVoltage extends CommandBase {
 
-  private SingularModule moduleSubsystem;
-  // private Joystick joystick;
+  private SingularModule module;
+  private Joystick joy;
 
   /** Creates a new SetModuleVoltage. */
-  public SetModuleVoltage(SingularModule moduleSubsystem, Joystick joystick) {
+  public SetModuleVoltage(SingularModule module, Joystick joy) {
     
-    this.moduleSubsystem = moduleSubsystem;
+    this.module = module;
+    this.joy = joy;
 
-    addRequirements(moduleSubsystem);
+    addRequirements(module);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    moduleSubsystem.module.setDriveVoltage(0.0);
-    moduleSubsystem.module.setTurnVoltage(0.0);
+    module.module.setDriveBrakeMode(true);
+    module.module.setDriveVoltage(0.0);
+    module.module.setTurnVoltage(0.0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    moduleSubsystem.module.setDriveVoltage(0);
-    moduleSubsystem.module.setTurnVoltage(0);
+    module.module.setDriveVoltage(joy.getRawAxis(1));
+    module.module.setTurnVoltage(joy.getRawAxis(5));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    moduleSubsystem.module.setDriveVoltage(0);
-    moduleSubsystem.module.setTurnVoltage(0.0);
+    module.module.setDriveBrakeMode(true);
+    module.module.setDriveVoltage(0);
+    module.module.setTurnVoltage(0.0);
   }
 
   // Returns true when the command should end.

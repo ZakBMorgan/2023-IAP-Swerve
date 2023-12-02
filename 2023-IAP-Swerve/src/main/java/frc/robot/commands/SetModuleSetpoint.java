@@ -10,7 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 //import edu.wpi.first.math.util.Units;
-//import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.swerve.SingularModule;
@@ -27,11 +27,12 @@ public class SetModuleSetpoint extends CommandBase {
   private double angle = 0.0;
 
   private final SingularModule module;
-  //private final Joystick joy;
+  private final Joystick joy;
 
-  public SetModuleSetpoint(SingularModule module) {
+  public SetModuleSetpoint(SingularModule module, Joystick joy) {
     
     this.module = module;
+    this.joy = joy;
 
     addRequirements(module);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -47,6 +48,26 @@ public class SetModuleSetpoint extends CommandBase {
   @Override
   public void execute() {
     double velocity = maxVelocity * MathUtil.applyDeadband(this.velocitySup.getAsDouble(), 0.0);
+
+    if(joy.getRawButton(1)) {
+      //preset 1
+
+    } else if(joy.getRawButton(2)) {
+      //preset 2
+
+    } else if(joy.getRawButton(3)) {
+      //preset 3
+
+    } else if(joy.getRawButton(4)) {
+      //preset 4
+
+    } else if(joy.getRawButton(5)) {
+      //preset 5
+
+    } else if(joy.getRawButton(6)) {
+      //preset 6
+      //etc...
+    }
 
     if (Timer.getFPGATimestamp() - lastTime >= 0.2) {
       // Either adds or subtracts depending on sign
