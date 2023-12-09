@@ -36,6 +36,40 @@ public class SetModuleVoltage extends CommandBase {
   public void execute() {
     module.module.setDriveVoltage(joy.getRawAxis(1));
     module.module.setTurnVoltage(joy.getRawAxis(5));
+
+    if(joy.getRawButton(1)) {
+
+      module.module.setTurnVoltage(1.0);
+
+    } else if(joy.getRawButton(2)) {
+
+      module.module.setTurnVoltage(4.0);
+
+    } else if(joy.getRawButton(3)) {
+
+      module.module.setTurnVoltage(8.0);
+
+    } else if(joy.getRawButton(4)) {
+
+      module.module.setTurnVoltage(12.0);
+
+    } else if(joy.getRawButton(5)) {
+
+      module.module.setDriveVoltage(1.0);
+
+    } else if(joy.getRawButton(6)) {
+
+      module.module.setDriveVoltage(4.0);
+
+    } else if(joy.getRawButton(7)) {
+
+      module.module.setDriveVoltage(8.0);
+
+    } else if(joy.getRawButton(8)) {
+
+      module.module.setDriveVoltage(12.0);
+
+    }
   }
 
   // Called once the command ends or is interrupted.
