@@ -49,24 +49,38 @@ public class SetModuleSetpoint extends CommandBase {
   public void execute() {
     double velocity = maxVelocity * MathUtil.applyDeadband(this.velocitySup.getAsDouble(), 0.0);
 
-    if(joy.getRawButton(1)) {
+    if(joy.getRawButton(0)) {
       //preset 1
+      angle = Math.PI/4;
 
-    } else if(joy.getRawButton(2)) {
+    } else if(joy.getRawButton(1)) {
       //preset 2
+      angle = Math.PI/2;
+      
+    } else if(joy.getRawButton(2)) {
+      //preset 3
+      angle = 3 * Math.PI/4;
 
     } else if(joy.getRawButton(3)) {
-      //preset 3
-
-    } else if(joy.getRawButton(4)) {
-      //preset 4
+      //preset 5
+      angle = Math.PI;
 
     } else if(joy.getRawButton(5)) {
-      //preset 5
-
-    } else if(joy.getRawButton(6)) {
       //preset 6
-      //etc...
+      velocity = 1.0;
+      
+    } else if(joy.getRawButton(6)) {
+      //preset 7
+      velocity = 2.0;
+
+    } else if(joy.getRawButton(7)) {
+      //preset 8
+      velocity = 3.0;
+      
+    } else if(joy.getRawButton(8)) {
+      //preset 9
+      velocity = 3.7;
+
     }
 
     if (Timer.getFPGATimestamp() - lastTime >= 0.2) {
